@@ -100,16 +100,30 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
-        // list_cinemas
-        if ($pathinfo === '/cinemas') {
-            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                $allow = array_merge($allow, array('GET', 'HEAD'));
-                goto not_list_cinemas;
-            }
+        if (0 === strpos($pathinfo, '/cinema')) {
+            // list_cinemas
+            if ($pathinfo === '/cinemas') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_list_cinemas;
+                }
 
-            return array (  '_controller' => 'AppBundle\\Controller\\CinemaController::getCinemasAction',  '_route' => 'list_cinemas',);
+                return array (  '_controller' => 'AppBundle\\Controller\\CinemaController::getCinemasAction',  '_route' => 'list_cinemas',);
+            }
+            not_list_cinemas:
+
+            // un_cinema
+            if (preg_match('#^/cinema/(?P<cinema_id>[^/]++)$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_un_cinema;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'un_cinema')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::getCinemaAction',));
+            }
+            not_un_cinema:
+
         }
-        not_list_cinemas:
 
         // homepage
         if (rtrim($pathinfo, '/') === '') {

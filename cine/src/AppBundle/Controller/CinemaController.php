@@ -35,4 +35,28 @@ class CinemaController extends Controller
 
         return new JsonResponse($formatted);
     }
+
+
+
+    /**
+     * @Route("/cinema/{cinema_id}", name="un_cinema")
+     * @Method({"GET"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getCinemaAction(Request $request) {
+        $unCinema = $this->get('doctrine.orm.entity_manager')
+            ->getRepository('AppBundle:Cinema')
+            ->find($request->get('cinema_id'));
+
+        $formatted = [
+            'id' => $unCinema->getId(),
+            'nom' => $unCinema->getNom(),
+            'adresse' => $unCinema->getAdresse(),
+            'cp' => $unCinema->getCp(),
+            'ville' => $unCinema->getVille()
+        ];
+
+        return new JsonResponse($formatted);
+    }
 }

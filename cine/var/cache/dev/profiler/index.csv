@@ -8,3 +8,8 @@ cc919c,172.18.0.1,GET,http://cine.loc:9999/cinemas,1513173565,40bb34,200
 fc9c21,172.18.0.1,GET,http://cine.loc:9999/cinemas,1513173624,d23298,200
 d23298,172.18.0.1,GET,http://cine.loc:9999/cinemas,1513173624,,500
 5eee8a,172.18.0.1,GET,http://cine.loc:9999/cinemas,1513173658,,200
+522fa3,172.18.0.1,GET,http://cine.loc:9999/cinema/1,1513174868,d434ae,200
+d434ae,172.18.0.1,GET,http://cine.loc:9999/cinema/1,1513174868,,500
+7237b6,172.18.0.1,GET,http://cine.loc:9999/cinema/1,1513174886,eb3787,200
+eb3787,172.18.0.1,GET,http://cine.loc:9999/cinema/1,1513174886,,404
+f5f74f,172.18.0.1,GET,http://cine.loc:9999/cinema/1,1513174901,,200
