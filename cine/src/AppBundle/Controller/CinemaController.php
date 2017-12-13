@@ -35,5 +35,4 @@ class CinemaController extends Controller
 
         return new JsonResponse($formatted);
     }
-
 }
