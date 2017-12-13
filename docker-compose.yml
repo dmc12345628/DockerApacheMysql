@@ -1,0 +1,30 @@
+version: '2'
+services:
+  apachephp:
+    build: 
+      context: ./build/apachephp
+    image: lpirm-dfs-apachephp
+    container_name: lpirm-dfs-apachephp
+    ports:
+      - "9999:80"
+    volumes:
+      - "./cine/:/var/www/html/cine"
+    networks:
+      - back-network
+  mysql:
+    build:
+      context: build/mysql
+    image: lpirm-dfs-mysql
+    container_name: lpirm-dfs-mysql
+    volumes:
+      - "./mysql/:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: cine
+      MYSQL_USER: cine
+      MYSQL_PASSWORD: cine
+      MYSQL_ROOT_PASSWORD: cine
+    networks:
+      - back-network
+networks:
+  back-network: 
+    driver: bridge
