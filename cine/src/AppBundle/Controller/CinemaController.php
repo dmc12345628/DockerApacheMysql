@@ -2,16 +2,17 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Cinema;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\Annotations\Get;
 
 class CinemaController extends Controller
 {
+    /**
+     * @Get("/cinemas")
+     */
     public function getCinemasAction(Request $request)
     {
         $cinemas = $this->get('doctrine.orm.entity_manager')
@@ -32,6 +33,9 @@ class CinemaController extends Controller
         return new JsonResponse($formatted);
     }
 
+    /**
+     * @Get("/cinema")
+     */
     public function getCinemaAction(Request $request)
     {
         $unCinema = $this->get('doctrine.orm.entity_manager')
