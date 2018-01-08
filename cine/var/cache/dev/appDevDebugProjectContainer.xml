@@ -15,6 +15,7 @@
       <parameter key="SwiftmailerBundle">Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle</parameter>
       <parameter key="DoctrineBundle">Doctrine\Bundle\DoctrineBundle\DoctrineBundle</parameter>
       <parameter key="SensioFrameworkExtraBundle">Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle</parameter>
+      <parameter key="FOSRestBundle">FOS\RestBundle\FOSRestBundle</parameter>
       <parameter key="AppBundle">AppBundle\AppBundle</parameter>
       <parameter key="DebugBundle">Symfony\Bundle\DebugBundle\DebugBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
@@ -56,6 +57,11 @@
         <parameter key="parent">null</parameter>
         <parameter key="path">/var/www/html/cine/vendor/sensio/framework-extra-bundle</parameter>
         <parameter key="namespace">Sensio\Bundle\FrameworkExtraBundle</parameter>
+      </parameter>
+      <parameter key="FOSRestBundle" type="collection">
+        <parameter key="parent">null</parameter>
+        <parameter key="path">/var/www/html/cine/vendor/friendsofsymfony/rest-bundle</parameter>
+        <parameter key="namespace">FOS\RestBundle</parameter>
       </parameter>
       <parameter key="AppBundle" type="collection">
         <parameter key="parent">null</parameter>
@@ -137,6 +143,7 @@
     <parameter key="router.cache_class_prefix">appDevDebugProjectContainer</parameter>
     <parameter key="request_listener.http_port">80</parameter>
     <parameter key="request_listener.https_port">443</parameter>
+    <parameter key="serializer.mapping.cache.prefix"></parameter>
     <parameter key="debug.error_handler.throw_at">-1</parameter>
     <parameter key="debug.container.dump">/var/www/html/cine/var/cache/dev/appDevDebugProjectContainer.xml</parameter>
     <parameter key="security.authentication.trust_resolver.anonymous_class">Symfony\Component\Security\Core\Authentication\Token\AnonymousToken</parameter>
@@ -508,7 +515,7 @@
                   <tag name="cache.pool"/>
                   <argument>YwumcplioG</argument>
                   <argument>0</argument>
-                  <argument>t9jSrGG-A+UIgvx61-6Fw2</argument>
+                  <argument>qpM5UnlJXrPcCrwdAkCoSQ</argument>
                   <argument>/var/www/html/cine/var/cache/dev/pools</argument>
                   <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
                   <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -521,7 +528,7 @@
                   <tag name="cache.pool"/>
                   <argument>viuDqwuNT8</argument>
                   <argument>0</argument>
-                  <argument>t9jSrGG-A+UIgvx61-6Fw2</argument>
+                  <argument>qpM5UnlJXrPcCrwdAkCoSQ</argument>
                   <argument>/var/www/html/cine/var/cache/dev/pools</argument>
                   <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
                   <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -853,7 +860,7 @@
       <tag name="cache.pool"/>
       <argument>H+k47MaC6t</argument>
       <argument>0</argument>
-      <argument>t9jSrGG-A+UIgvx61-6Fw2</argument>
+      <argument>qpM5UnlJXrPcCrwdAkCoSQ</argument>
       <argument>/var/www/html/cine/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -1390,6 +1397,83 @@
               </service>
             </argument>
           </call>
+          <call method="addLoader">
+            <argument type="service">
+              <service class="FOS\RestBundle\Routing\Loader\DirectoryRouteLoader" public="false">
+                <tag name="routing.loader"/>
+                <argument type="service" id="file_locator"/>
+                <argument type="service">
+                  <service class="FOS\RestBundle\Routing\Loader\RestRouteProcessor" public="false"/>
+                </argument>
+              </service>
+            </argument>
+          </call>
+          <call method="addLoader">
+            <argument type="service">
+              <service class="FOS\RestBundle\Routing\Loader\RestRouteLoader" public="false">
+                <tag name="routing.loader"/>
+                <argument type="service" id="service_container"/>
+                <argument type="service" id="file_locator"/>
+                <argument type="service" id="controller_name_converter"/>
+                <argument type="service">
+                  <service class="FOS\RestBundle\Routing\Loader\Reader\RestControllerReader" public="false">
+                    <argument type="service">
+                      <service class="FOS\RestBundle\Routing\Loader\Reader\RestActionReader" public="false">
+                        <argument type="service" id="annotation_reader"/>
+                        <argument type="service" id="fos_rest.request.param_fetcher.reader"/>
+                        <argument type="service" id="fos_rest.inflector"/>
+                        <argument>true</argument>
+                        <argument type="collection">
+                          <argument key="json">false</argument>
+                          <argument key="xml">false</argument>
+                          <argument key="html">true</argument>
+                        </argument>
+                        <argument>true</argument>
+                      </service>
+                    </argument>
+                    <argument type="service" id="annotation_reader"/>
+                  </service>
+                </argument>
+                <argument>null</argument>
+              </service>
+            </argument>
+          </call>
+          <call method="addLoader">
+            <argument type="service">
+              <service class="FOS\RestBundle\Routing\Loader\RestYamlCollectionLoader" public="false">
+                <tag name="routing.loader"/>
+                <argument type="service" id="file_locator"/>
+                <argument type="service">
+                  <service class="FOS\RestBundle\Routing\Loader\RestRouteProcessor" public="false"/>
+                </argument>
+                <argument>true</argument>
+                <argument type="collection">
+                  <argument key="json">false</argument>
+                  <argument key="xml">false</argument>
+                  <argument key="html">true</argument>
+                </argument>
+                <argument>null</argument>
+              </service>
+            </argument>
+          </call>
+          <call method="addLoader">
+            <argument type="service">
+              <service class="FOS\RestBundle\Routing\Loader\RestXmlCollectionLoader" public="false">
+                <tag name="routing.loader"/>
+                <argument type="service" id="file_locator"/>
+                <argument type="service">
+                  <service class="FOS\RestBundle\Routing\Loader\RestRouteProcessor" public="false"/>
+                </argument>
+                <argument>true</argument>
+                <argument type="collection">
+                  <argument key="json">false</argument>
+                  <argument key="xml">false</argument>
+                  <argument key="html">true</argument>
+                </argument>
+                <argument>null</argument>
+              </service>
+            </argument>
+          </call>
         </service>
       </argument>
     </service>
@@ -1408,6 +1492,66 @@
       <argument type="service" id="request_stack"/>
       <argument type="service" id="router.request_context" on-invalid="ignore"/>
       <argument type="service" id="monolog.logger.request" on-invalid="ignore"/>
+    </service>
+    <service id="serializer" class="Symfony\Component\Serializer\Serializer">
+      <argument type="collection">
+        <argument type="service">
+          <service class="FOS\RestBundle\Serializer\Normalizer\FormErrorNormalizer" public="false">
+            <tag name="serializer.normalizer" priority="-10"/>
+            <argument type="service" id="translator"/>
+          </service>
+        </argument>
+        <argument type="service">
+          <service class="Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer" public="false">
+            <tag name="serializer.normalizer" priority="-900"/>
+          </service>
+        </argument>
+        <argument type="service">
+          <service class="Symfony\Component\Serializer\Normalizer\DateTimeNormalizer" public="false">
+            <tag name="serializer.normalizer" priority="-910"/>
+          </service>
+        </argument>
+        <argument type="service">
+          <service class="Symfony\Component\Serializer\Normalizer\DataUriNormalizer" public="false">
+            <tag name="serializer.normalizer" priority="-920"/>
+          </service>
+        </argument>
+        <argument type="service">
+          <service class="Symfony\Component\Serializer\Normalizer\ArrayDenormalizer" public="false">
+            <tag name="serializer.normalizer" priority="-990"/>
+          </service>
+        </argument>
+        <argument type="service">
+          <service class="Symfony\Component\Serializer\Normalizer\ObjectNormalizer" public="false">
+            <tag name="serializer.normalizer" priority="-1000"/>
+            <argument type="service">
+              <service class="Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory" public="false">
+                <argument type="service">
+                  <service class="Symfony\Component\Serializer\Mapping\Loader\LoaderChain" public="false">
+                    <argument type="collection"/>
+                  </service>
+                </argument>
+                <argument>null</argument>
+              </service>
+            </argument>
+            <argument>null</argument>
+            <argument type="service" id="property_accessor"/>
+            <argument>null</argument>
+          </service>
+        </argument>
+      </argument>
+      <argument type="collection">
+        <argument type="service">
+          <service class="Symfony\Component\Serializer\Encoder\XmlEncoder" public="false">
+            <tag name="serializer.encoder"/>
+          </service>
+        </argument>
+        <argument type="service">
+          <service class="Symfony\Component\Serializer\Encoder\JsonEncoder" public="false">
+            <tag name="serializer.encoder"/>
+          </service>
+        </argument>
+      </argument>
     </service>
     <service id="debug.debug_handlers_listener" class="Symfony\Component\HttpKernel\EventListener\DebugHandlersListener">
       <tag name="kernel.event_subscriber"/>
@@ -1436,6 +1580,14 @@
           <argument>onKernelController</argument>
         </argument>
         <argument>0</argument>
+      </call>
+      <call method="addListenerService">
+        <argument>kernel.request</argument>
+        <argument type="collection">
+          <argument>fos_rest.body_listener</argument>
+          <argument>onKernelRequest</argument>
+        </argument>
+        <argument>10</argument>
       </call>
       <call method="addSubscriberService">
         <argument>response_listener</argument>
@@ -1589,7 +1741,7 @@
       <argument type="collection">
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>5a31322e9e24c7.29118780</argument>
+            <argument>5a5340c923ef51.63603162</argument>
           </service>
         </argument>
       </argument>
@@ -1723,7 +1875,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.token_storage"/>
-            <argument>5a31322e9e24c7.29118780</argument>
+            <argument>5a5340c923ef51.63603162</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>
@@ -2242,6 +2394,35 @@
       <argument type="service" id="security.token_storage" on-invalid="null"/>
       <argument type="service" id="security.authorization_checker" on-invalid="null"/>
     </service>
+    <service id="fos_rest.request.param_fetcher" class="FOS\RestBundle\Request\ParamFetcher">
+      <argument type="service" id="service_container"/>
+      <argument type="service" id="fos_rest.request.param_fetcher.reader"/>
+      <argument type="service" id="request_stack"/>
+      <argument type="service" id="validator" on-invalid="null"/>
+    </service>
+    <service id="fos_rest.request.param_fetcher.reader" class="FOS\RestBundle\Request\ParamReader" public="false">
+      <argument type="service" id="annotation_reader"/>
+    </service>
+    <service id="fos_rest.normalizer.camel_keys" class="FOS\RestBundle\Normalizer\CamelKeysNormalizer"/>
+    <service id="fos_rest.normalizer.camel_keys_with_leading_underscore" class="FOS\RestBundle\Normalizer\CamelKeysNormalizerWithLeadingUnderscore"/>
+    <service id="fos_rest.decoder.json" class="FOS\RestBundle\Decoder\JsonDecoder"/>
+    <service id="fos_rest.decoder.jsontoform" class="FOS\RestBundle\Decoder\JsonToFormDecoder"/>
+    <service id="fos_rest.decoder.xml" class="FOS\RestBundle\Decoder\XmlDecoder"/>
+    <service id="fos_rest.decoder_provider" class="FOS\RestBundle\Decoder\ContainerDecoderProvider">
+      <argument type="service" id="service_container"/>
+      <argument type="collection">
+        <argument key="json">fos_rest.decoder.json</argument>
+        <argument key="xml">fos_rest.decoder.xml</argument>
+      </argument>
+    </service>
+    <service id="fos_rest.body_listener" class="FOS\RestBundle\EventListener\BodyListener">
+      <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="10"/>
+      <argument type="service" id="fos_rest.decoder_provider"/>
+      <argument>false</argument>
+      <call method="setDefaultFormat">
+        <argument>null</argument>
+      </call>
+    </service>
     <service id="data_collector.dump" class="Symfony\Component\HttpKernel\DataCollector\DumpDataCollector">
       <tag name="data_collector" id="dump" template="@Debug/Profiler/dump.html.twig" priority="240"/>
       <argument type="service" id="debug.stopwatch" on-invalid="ignore"/>
@@ -2618,6 +2799,28 @@
         </service>
       </configurator>
     </service>
+    <service id="fos\restbundle\view\viewhandlerinterface" class="FOS\RestBundle\View\ViewHandler">
+      <argument type="service" id="router"/>
+      <argument type="service" id="fos_rest.serializer"/>
+      <argument type="service" id="templating" on-invalid="null"/>
+      <argument type="service" id="request_stack"/>
+      <argument type="collection">
+        <argument key="json">false</argument>
+        <argument key="xml">false</argument>
+        <argument key="html">true</argument>
+      </argument>
+      <argument>400</argument>
+      <argument>204</argument>
+      <argument>false</argument>
+      <argument type="collection">
+        <argument key="html">302</argument>
+      </argument>
+      <argument>twig</argument>
+      <call method="setSerializeNullStrategy">
+        <argument>false</argument>
+      </call>
+    </service>
+    <service id="fos_rest.inflector" class="FOS\RestBundle\Inflector\DoctrineInflector"/>
     <service id="twig.loader" class="Symfony\Bundle\TwigBundle\Loader\FilesystemLoader">
       <tag name="twig.loader"/>
       <argument type="service" id="templating.locator"/>
@@ -2657,6 +2860,9 @@
         <argument>/var/www/html/cine/vendor/symfony/symfony/src/Symfony/Bridge/Twig/Resources/views/Form</argument>
       </call>
     </service>
+    <service id="fos_rest.serializer" class="FOS\RestBundle\Serializer\SymfonySerializerAdapter" lazy="true">
+      <argument type="service" id="serializer"/>
+    </service>
     <service id="session.storage" alias="session.storage.native"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher"/>
     <service id="swiftmailer.spool" alias="swiftmailer.mailer.default.spool"/>
@@ -2670,6 +2876,10 @@
     <service id="doctrine.orm.default_metadata_cache" alias="doctrine_cache.providers.doctrine.orm.default_metadata_cache"/>
     <service id="doctrine.orm.default_result_cache" alias="doctrine_cache.providers.doctrine.orm.default_result_cache"/>
     <service id="doctrine.orm.default_query_cache" alias="doctrine_cache.providers.doctrine.orm.default_query_cache"/>
+    <service id="fos\restbundle\request\paramfetcherinterface" alias="fos_rest.request.param_fetcher"/>
+    <service id="fos_rest.router" alias="router"/>
+    <service id="fos_rest.templating" alias="templating"/>
+    <service id="fos_rest.view_handler" alias="fos\restbundle\view\viewhandlerinterface"/>
     <service id="console.command.sensiolabs_security_command_securitycheckercommand" alias="sensio_distribution.security_checker.command"/>
   </services>
 </container>
