@@ -32,4 +32,18 @@ class CinemaController extends Controller
         } else
             return $form;
     }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\Delete("/cinemas/{id}")
+    */
+    public function removeCinemasAction(Request $request) {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $cinema = $em->getRepository('AppBundle:Cinema')->find($request->get('id'));
+
+        if ($cinema) {
+            $em->remove($cinema);
+            $em->flush();
+        }
+    }
 }
