@@ -100,39 +100,39 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
-        if (0 === strpos($pathinfo, '/cinemas')) {
-            // app_cinema_postcinemas
-            if ($pathinfo === '/cinemas') {
+        if (0 === strpos($pathinfo, '/cinema')) {
+            // app_cinema_postcinema
+            if ($pathinfo === '/cinema') {
                 if ($this->context->getMethod() != 'POST') {
                     $allow[] = 'POST';
-                    goto not_app_cinema_postcinemas;
+                    goto not_app_cinema_postcinema;
                 }
 
-                return array (  '_controller' => 'AppBundle\\Controller\\CinemaController::postCinemasAction',  '_route' => 'app_cinema_postcinemas',);
+                return array (  '_controller' => 'AppBundle\\Controller\\CinemaController::postCinemaAction',  '_route' => 'app_cinema_postcinema',);
             }
-            not_app_cinema_postcinemas:
+            not_app_cinema_postcinema:
 
-            // app_cinema_removecinemas
-            if (preg_match('#^/cinemas/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            // app_cinema_removecinema
+            if (preg_match('#^/cinema/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
                 if ($this->context->getMethod() != 'DELETE') {
                     $allow[] = 'DELETE';
-                    goto not_app_cinema_removecinemas;
+                    goto not_app_cinema_removecinema;
                 }
 
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_removecinemas')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::removeCinemasAction',));
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_removecinema')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::removeCinemaAction',));
             }
-            not_app_cinema_removecinemas:
+            not_app_cinema_removecinema:
 
-            // app_cinema_updatecinemas
-            if (preg_match('#^/cinemas/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                if ($this->context->getMethod() != 'PUT') {
-                    $allow[] = 'PUT';
-                    goto not_app_cinema_updatecinemas;
+            // app_cinema_updatecinema
+            if (preg_match('#^/cinema/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ($this->context->getMethod() != 'PATCH') {
+                    $allow[] = 'PATCH';
+                    goto not_app_cinema_updatecinema;
                 }
 
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_updatecinemas')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::updateCinemasAction',));
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_updatecinema')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::updateCinemaAction',));
             }
-            not_app_cinema_updatecinemas:
+            not_app_cinema_updatecinema:
 
         }
 
@@ -145,39 +145,39 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
         }
 
-        if (0 === strpos($pathinfo, '/cinemas')) {
-            // remove_cinemas
-            if (preg_match('#^/cinemas/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/cinema')) {
+            // remove_cinema
+            if (preg_match('#^/cinema/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
                 if ($this->context->getMethod() != 'DELETE') {
                     $allow[] = 'DELETE';
-                    goto not_remove_cinemas;
+                    goto not_remove_cinema;
                 }
 
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'remove_cinemas')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::removeCinemasAction',  '_format' => NULL,));
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'remove_cinema')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::removeCinemaAction',  '_format' => NULL,));
             }
-            not_remove_cinemas:
+            not_remove_cinema:
 
-            // update_cinemas
-            if (preg_match('#^/cinemas/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                if ($this->context->getMethod() != 'PUT') {
-                    $allow[] = 'PUT';
-                    goto not_update_cinemas;
+            // update_cinema
+            if (preg_match('#^/cinema/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ($this->context->getMethod() != 'PATCH') {
+                    $allow[] = 'PATCH';
+                    goto not_update_cinema;
                 }
 
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'update_cinemas')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::updateCinemasAction',  '_format' => NULL,));
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'update_cinema')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::updateCinemaAction',  '_format' => NULL,));
             }
-            not_update_cinemas:
+            not_update_cinema:
 
-            // post_cinemas
-            if ($pathinfo === '/cinemas') {
+            // post_cinema
+            if ($pathinfo === '/cinema') {
                 if ($this->context->getMethod() != 'POST') {
                     $allow[] = 'POST';
-                    goto not_post_cinemas;
+                    goto not_post_cinema;
                 }
 
-                return array (  '_controller' => 'AppBundle\\Controller\\CinemaController::postCinemasAction',  '_format' => NULL,  '_route' => 'post_cinemas',);
+                return array (  '_controller' => 'AppBundle\\Controller\\CinemaController::postCinemaAction',  '_format' => NULL,  '_route' => 'post_cinema',);
             }
-            not_post_cinemas:
+            not_post_cinema:
 
         }
 

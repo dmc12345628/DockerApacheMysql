@@ -51,7 +51,7 @@ class CinemaController extends Controller
 
     /**
      * @Rest\View()
-     * @Rest\Put("/cinema/{id}")
+     * @Rest\Patch("/cinema/{id}")
      */
     public function updateCinemaAction(Request $request)
     {
@@ -65,7 +65,7 @@ class CinemaController extends Controller
 
         $form = $this->createForm(CinemaType::class, $cinema);
 
-        $form->submit($request->request->all());
+        $form->submit($request->request->all(), false);
 
         if ($form->isValid()) {
             $em = $this->get('doctrine.orm.entity_manager');
