@@ -125,14 +125,25 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
             // app_cinema_updatecinema
             if (preg_match('#^/cinema/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                if ($this->context->getMethod() != 'PATCH') {
-                    $allow[] = 'PATCH';
+                if ($this->context->getMethod() != 'PUT') {
+                    $allow[] = 'PUT';
                     goto not_app_cinema_updatecinema;
                 }
 
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_updatecinema')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::updateCinemaAction',));
             }
             not_app_cinema_updatecinema:
+
+            // app_cinema_patchcinema
+            if (preg_match('#^/cinema/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ($this->context->getMethod() != 'PATCH') {
+                    $allow[] = 'PATCH';
+                    goto not_app_cinema_patchcinema;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_patchcinema')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::patchCinemaAction',));
+            }
+            not_app_cinema_patchcinema:
 
         }
 
@@ -159,8 +170,8 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
             // update_cinema
             if (preg_match('#^/cinema/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                if ($this->context->getMethod() != 'PATCH') {
-                    $allow[] = 'PATCH';
+                if ($this->context->getMethod() != 'PUT') {
+                    $allow[] = 'PUT';
                     goto not_update_cinema;
                 }
 
@@ -178,6 +189,17 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                 return array (  '_controller' => 'AppBundle\\Controller\\CinemaController::postCinemaAction',  '_format' => NULL,  '_route' => 'post_cinema',);
             }
             not_post_cinema:
+
+            // patch_cinema
+            if (preg_match('#^/cinema/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ($this->context->getMethod() != 'PATCH') {
+                    $allow[] = 'PATCH';
+                    goto not_patch_cinema;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'patch_cinema')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::patchCinemaAction',  '_format' => NULL,));
+            }
+            not_patch_cinema:
 
         }
 

@@ -32,3 +32,5 @@ cd504c,172.18.0.1,GET,http://cine.loc:9999/cinemas/2,1515593764,17b643,200
 d98c3d,172.18.0.1,PUT,http://cine.loc:9999/cinemas/2,1515593790,,200
 16d86d,172.18.0.1,PUT,http://cine.loc:9999/cinemas/2,1515594040,,400
 8c42ed,172.18.0.1,PATCH,http://cine.loc:9999/cinema/2,1515594351,,200
+0b74da,172.18.0.1,PUT,http://cine.loc:9999/cinema/2,1515594898,,200
+6aa35e,172.18.0.1,PATCH,http://cine.loc:9999/cinema/2,1515594914,,200

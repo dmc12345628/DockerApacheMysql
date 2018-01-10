@@ -51,10 +51,23 @@ class CinemaController extends Controller
 
     /**
      * @Rest\View()
-     * @Rest\Patch("/cinema/{id}")
+     * @Rest\Put("/cinema/{id}")
      */
     public function updateCinemaAction(Request $request)
     {
+        return $this->updateCinema($request, true);
+    }
+
+    /**
+     * @Rest\View()
+     * @Rest\Patch("/cinema/{id}")
+     */
+    public function patchCinemaAction(Request $request)
+    {
+        return $this->updateCinema($request, false);
+    }
+
+    public function updateCinema(Request $request, $clearMissing) {
         $cinema = $this->get('doctrine.orm.entity_manager')
             ->getRepository('AppBundle:Cinema')
             ->find($request->get('id'));
@@ -65,7 +78,7 @@ class CinemaController extends Controller
 
         $form = $this->createForm(CinemaType::class, $cinema);
 
-        $form->submit($request->request->all(), false);
+        $form->submit($request->request->all(), $clearMissing);
 
         if ($form->isValid()) {
             $em = $this->get('doctrine.orm.entity_manager');
