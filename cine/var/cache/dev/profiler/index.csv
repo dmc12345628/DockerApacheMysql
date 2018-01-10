@@ -30,3 +30,4 @@ dcf251,172.18.0.1,PUT,http://cine.loc:9999/cinemas/1,1515593741,,404
 cd504c,172.18.0.1,GET,http://cine.loc:9999/cinemas/2,1515593764,17b643,200
 17b643,172.18.0.1,PUT,http://cine.loc:9999/cinemas/2,1515593764,,500
 d98c3d,172.18.0.1,PUT,http://cine.loc:9999/cinemas/2,1515593790,,200
+16d86d,172.18.0.1,PUT,http://cine.loc:9999/cinemas/2,1515594040,,400

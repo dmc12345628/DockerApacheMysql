@@ -14,9 +14,9 @@ class CinemaController extends Controller
 {
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED)
-     * @Rest\Post("/cinemas")
+     * @Rest\Post("/cinema")
      */
-    public function postCinemasAction(Request $request)
+    public function postCinemaAction(Request $request)
     {
         $cinema = new Cinema();
         $form = $this->createForm(CinemaType::class, $cinema);
@@ -36,9 +36,9 @@ class CinemaController extends Controller
 
     /**
      * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
-     * @Rest\Delete("/cinemas/{id}")
+     * @Rest\Delete("/cinema/{id}")
      */
-    public function removeCinemasAction(Request $request)
+    public function removeCinemaAction(Request $request)
     {
         $em = $this->get('doctrine.orm.entity_manager');
         $cinema = $em->getRepository('AppBundle:Cinema')->find($request->get('id'));
@@ -51,9 +51,9 @@ class CinemaController extends Controller
 
     /**
      * @Rest\View()
-     * @Rest\Put("/cinemas/{id}")
+     * @Rest\Put("/cinema/{id}")
      */
-    public function updateCinemasAction(Request $request)
+    public function updateCinemaAction(Request $request)
     {
         $cinema = $this->get('doctrine.orm.entity_manager')
             ->getRepository('AppBundle:Cinema')
