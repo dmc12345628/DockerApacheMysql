@@ -123,6 +123,17 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             }
             not_app_cinema_removecinemas:
 
+            // app_cinema_updatecinemas
+            if (preg_match('#^/cinemas/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ($this->context->getMethod() != 'PUT') {
+                    $allow[] = 'PUT';
+                    goto not_app_cinema_updatecinemas;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_updatecinemas')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::updateCinemasAction',));
+            }
+            not_app_cinema_updatecinemas:
+
         }
 
         // homepage
@@ -145,6 +156,17 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'remove_cinemas')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::removeCinemasAction',  '_format' => NULL,));
             }
             not_remove_cinemas:
+
+            // update_cinemas
+            if (preg_match('#^/cinemas/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ($this->context->getMethod() != 'PUT') {
+                    $allow[] = 'PUT';
+                    goto not_update_cinemas;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'update_cinemas')), array (  '_controller' => 'AppBundle\\Controller\\CinemaController::updateCinemasAction',  '_format' => NULL,));
+            }
+            not_update_cinemas:
 
             // post_cinemas
             if ($pathinfo === '/cinemas') {

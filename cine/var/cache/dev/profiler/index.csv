@@ -25,3 +25,8 @@ fce24b,172.18.0.1,POST,http://cine.loc:9999/cinemas,1515592618,,400
 b8d9e2,172.18.0.1,DELETE,http://cine.loc:9999/cinemas/1,1515592976,,500
 22bcc0,172.18.0.1,DELETE,http://cine.loc:9999/cinemas/1,1515592995,,204
 d16419,172.18.0.1,DELETE,http://cine.loc:9999/cinemas/1,1515593018,,204
+dcf251,172.18.0.1,PUT,http://cine.loc:9999/cinemas/1,1515593741,,404
+55ed13,172.18.0.1,PUT,http://cine.loc:9999/cinemas/2,1515593750,,400
+cd504c,172.18.0.1,GET,http://cine.loc:9999/cinemas/2,1515593764,17b643,200
+17b643,172.18.0.1,PUT,http://cine.loc:9999/cinemas/2,1515593764,,500
+d98c3d,172.18.0.1,PUT,http://cine.loc:9999/cinemas/2,1515593790,,200
