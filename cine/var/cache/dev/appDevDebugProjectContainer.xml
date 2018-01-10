@@ -330,6 +330,7 @@
     <parameter key="sensio_framework_extra.converter.doctrine.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
     <parameter key="sensio_framework_extra.converter.datetime.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter</parameter>
     <parameter key="sensio_framework_extra.view.listener.class">Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener</parameter>
+    <parameter key="fos_rest.format_listener.rules">null</parameter>
     <parameter key="web_profiler.debug_toolbar.position">bottom</parameter>
     <parameter key="web_profiler.debug_toolbar.intercept_redirects">false</parameter>
     <parameter key="web_profiler.debug_toolbar.mode">2</parameter>
@@ -515,7 +516,7 @@
                   <tag name="cache.pool"/>
                   <argument>YwumcplioG</argument>
                   <argument>0</argument>
-                  <argument>qpM5UnlJXrPcCrwdAkCoSQ</argument>
+                  <argument>CSRkxMxeWVXRGIJ1NBmSmU</argument>
                   <argument>/var/www/html/cine/var/cache/dev/pools</argument>
                   <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
                   <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -528,7 +529,7 @@
                   <tag name="cache.pool"/>
                   <argument>viuDqwuNT8</argument>
                   <argument>0</argument>
-                  <argument>qpM5UnlJXrPcCrwdAkCoSQ</argument>
+                  <argument>CSRkxMxeWVXRGIJ1NBmSmU</argument>
                   <argument>/var/www/html/cine/var/cache/dev/pools</argument>
                   <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
                   <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -860,7 +861,7 @@
       <tag name="cache.pool"/>
       <argument>H+k47MaC6t</argument>
       <argument>0</argument>
-      <argument>qpM5UnlJXrPcCrwdAkCoSQ</argument>
+      <argument>CSRkxMxeWVXRGIJ1NBmSmU</argument>
       <argument>/var/www/html/cine/var/cache/dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -1150,6 +1151,11 @@
           <argument>/var/www/html/cine/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/config/validation.xml</argument>
         </argument>
       </call>
+      <call method="addYamlMappings">
+        <argument type="collection">
+          <argument>/var/www/html/cine/src/AppBundle/Resources/config/validation.yml</argument>
+        </argument>
+      </call>
       <call method="enableAnnotationMapping">
         <argument type="service" id="annotation_reader"/>
       </call>
@@ -1422,7 +1428,7 @@
                         <argument type="service" id="annotation_reader"/>
                         <argument type="service" id="fos_rest.request.param_fetcher.reader"/>
                         <argument type="service" id="fos_rest.inflector"/>
-                        <argument>true</argument>
+                        <argument>flase</argument>
                         <argument type="collection">
                           <argument key="json">false</argument>
                           <argument key="xml">false</argument>
@@ -1446,7 +1452,7 @@
                 <argument type="service">
                   <service class="FOS\RestBundle\Routing\Loader\RestRouteProcessor" public="false"/>
                 </argument>
-                <argument>true</argument>
+                <argument>flase</argument>
                 <argument type="collection">
                   <argument key="json">false</argument>
                   <argument key="xml">false</argument>
@@ -1464,7 +1470,7 @@
                 <argument type="service">
                   <service class="FOS\RestBundle\Routing\Loader\RestRouteProcessor" public="false"/>
                 </argument>
-                <argument>true</argument>
+                <argument>flase</argument>
                 <argument type="collection">
                   <argument key="json">false</argument>
                   <argument key="xml">false</argument>
@@ -1589,6 +1595,14 @@
         </argument>
         <argument>10</argument>
       </call>
+      <call method="addListenerService">
+        <argument>kernel.request</argument>
+        <argument type="collection">
+          <argument>fos_rest.format_listener</argument>
+          <argument>onKernelRequest</argument>
+        </argument>
+        <argument>34</argument>
+      </call>
       <call method="addSubscriberService">
         <argument>response_listener</argument>
         <argument>Symfony\Component\HttpKernel\EventListener\ResponseListener</argument>
@@ -1678,6 +1692,10 @@
         <argument>Sensio\Bundle\FrameworkExtraBundle\EventListener\SecurityListener</argument>
       </call>
       <call method="addSubscriberService">
+        <argument>fos_rest.view_response_listener</argument>
+        <argument>FOS\RestBundle\EventListener\ViewResponseListener</argument>
+      </call>
+      <call method="addSubscriberService">
         <argument>debug.dump_listener</argument>
         <argument>Symfony\Component\HttpKernel\EventListener\DumpListener</argument>
       </call>
@@ -1741,7 +1759,7 @@
       <argument type="collection">
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>5a5340c923ef51.63603162</argument>
+            <argument>5a561895cbbba2.53282762</argument>
           </service>
         </argument>
       </argument>
@@ -1875,7 +1893,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.token_storage"/>
-            <argument>5a5340c923ef51.63603162</argument>
+            <argument>5a561895cbbba2.53282762</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>
@@ -2403,6 +2421,11 @@
     <service id="fos_rest.request.param_fetcher.reader" class="FOS\RestBundle\Request\ParamReader" public="false">
       <argument type="service" id="annotation_reader"/>
     </service>
+    <service id="fos_rest.view_response_listener" class="FOS\RestBundle\EventListener\ViewResponseListener">
+      <tag name="kernel.event_subscriber"/>
+      <argument type="service" id="fos\restbundle\view\viewhandlerinterface"/>
+      <argument>false</argument>
+    </service>
     <service id="fos_rest.normalizer.camel_keys" class="FOS\RestBundle\Normalizer\CamelKeysNormalizer"/>
     <service id="fos_rest.normalizer.camel_keys_with_leading_underscore" class="FOS\RestBundle\Normalizer\CamelKeysNormalizerWithLeadingUnderscore"/>
     <service id="fos_rest.decoder.json" class="FOS\RestBundle\Decoder\JsonDecoder"/>
@@ -2421,6 +2444,55 @@
       <argument>false</argument>
       <call method="setDefaultFormat">
         <argument>null</argument>
+      </call>
+    </service>
+    <service id="fos_rest.format_listener" class="FOS\RestBundle\EventListener\FormatListener">
+      <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="34"/>
+      <argument type="service" id="fos_rest.format_negotiator"/>
+    </service>
+    <service id="fos_rest.format_negotiator" class="FOS\RestBundle\Negotiation\FormatNegotiator">
+      <argument type="service" id="request_stack"/>
+      <call method="add">
+        <argument type="service">
+          <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+            <argument>^/_profiler|_wdt/</argument>
+            <argument>null</argument>
+            <argument>null</argument>
+            <argument>null</argument>
+            <argument type="collection"/>
+          </service>
+        </argument>
+        <argument type="collection">
+          <argument key="methods">null</argument>
+          <argument key="priorities" type="collection">
+            <argument>html</argument>
+            <argument>json</argument>
+          </argument>
+          <argument key="fallback_format">html</argument>
+          <argument key="attributes" type="collection"/>
+          <argument key="prefer_extension">2.0</argument>
+        </argument>
+      </call>
+      <call method="add">
+        <argument type="service">
+          <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
+            <argument>^/</argument>
+            <argument>null</argument>
+            <argument>null</argument>
+            <argument>null</argument>
+            <argument type="collection"/>
+          </service>
+        </argument>
+        <argument type="collection">
+          <argument key="priorities" type="collection">
+            <argument>json</argument>
+          </argument>
+          <argument key="fallback_format">json</argument>
+          <argument key="methods">null</argument>
+          <argument key="attributes" type="collection"/>
+          <argument key="stop">false</argument>
+          <argument key="prefer_extension">2.0</argument>
+        </argument>
       </call>
     </service>
     <service id="data_collector.dump" class="Symfony\Component\HttpKernel\DataCollector\DumpDataCollector">

@@ -2,59 +2,34 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Cinema;
+use AppBundle\Form\Type\CinemaType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations as Rest;
 
 class CinemaController extends Controller
 {
     /**
-     * @Get("/cinemas")
-     */
-    public function getCinemasAction(Request $request)
-    {
-        $cinemas = $this->get('doctrine.orm.entity_manager')
-            ->getRepository('AppBundle:Cinema')
-            ->findAll();
+     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\Post("/cinemas")
+    */
+    public function postCinemasAction(Request $request) {
+        $cinema = new Cinema();
+        $form = $this->createForm(CinemaType::class, $cinema);
 
-        $formatted = [];
-        foreach ($cinemas as $unCinema) {
-            $formatted[] = [
-                'id' => $unCinema->getId(),
-                'nom' => $unCinema->getNom(),
-                'adresse' => $unCinema->getAdresse(),
-                'cp' => $unCinema->getCp(),
-                'ville' => $unCinema->getVille(),
-            ];
-        }
+        $form->submit($request->request->all());
 
-        return new JsonResponse($formatted);
-    }
+        if ($form->isValid()) {
+            $em = $this->get('doctrine.orm.entity_manager');
 
-    /**
-     * @Get("/cinema")
-     */
-    public function getCinemaAction(Request $request)
-    {
-        $unCinema = $this->get('doctrine.orm.entity_manager')
-            ->getRepository('AppBundle:Cinema')
-            ->find($request->get('cinema_id'));
+            $em->persist($cinema);
+            $em->flush();
 
-        if (empty($unCinema)) {
-            return new JsonResponse(['message' => 'Cinema not found',
-                'status' => Response::HTTP_NOT_FOUND]);
-        }
-
-        $formatted = [
-            'id' => $unCinema->getId(),
-            'nom' => $unCinema->getNom(),
-            'adresse' => $unCinema->getAdresse(),
-            'cp' => $unCinema->getCp(),
-            'ville' => $unCinema->getVille()
-        ];
-
-        return new JsonResponse($formatted);
+            return $cinema;
+        } else
+            return $form;
     }
 }

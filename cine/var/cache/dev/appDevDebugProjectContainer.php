@@ -119,12 +119,15 @@ class appDevDebugProjectContainer extends Container
             'fos_rest.decoder.jsontoform' => 'getFosRest_Decoder_JsontoformService',
             'fos_rest.decoder.xml' => 'getFosRest_Decoder_XmlService',
             'fos_rest.decoder_provider' => 'getFosRest_DecoderProviderService',
+            'fos_rest.format_listener' => 'getFosRest_FormatListenerService',
+            'fos_rest.format_negotiator' => 'getFosRest_FormatNegotiatorService',
             'fos_rest.inflector' => 'getFosRest_InflectorService',
             'fos_rest.normalizer.camel_keys' => 'getFosRest_Normalizer_CamelKeysService',
             'fos_rest.normalizer.camel_keys_with_leading_underscore' => 'getFosRest_Normalizer_CamelKeysWithLeadingUnderscoreService',
             'fos_rest.request.param_fetcher' => 'getFosRest_Request_ParamFetcherService',
             'fos_rest.request.param_fetcher.reader' => 'getFosRest_Request_ParamFetcher_ReaderService',
             'fos_rest.serializer' => 'getFosRest_SerializerService',
+            'fos_rest.view_response_listener' => 'getFosRest_ViewResponseListenerService',
             'fragment.handler' => 'getFragment_HandlerService',
             'fragment.listener' => 'getFragment_ListenerService',
             'fragment.renderer.esi' => 'getFragment_Renderer_EsiService',
@@ -370,7 +373,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getCache_SystemService()
     {
-        return $this->services['cache.system'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('H+k47MaC6t', 0, 'qpM5UnlJXrPcCrwdAkCoSQ', (__DIR__.'/pools'), $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE));
+        return $this->services['cache.system'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('H+k47MaC6t', 0, 'CSRkxMxeWVXRGIJ1NBmSmU', (__DIR__.'/pools'), $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE));
     }
 
     /**
@@ -388,8 +391,8 @@ class appDevDebugProjectContainer extends Container
         $b = new \Symfony\Component\HttpKernel\CacheClearer\Psr6CacheClearer();
         $b->addPool($this->get('cache.app'));
         $b->addPool($this->get('cache.system'));
-        $b->addPool(\Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('YwumcplioG', 0, 'qpM5UnlJXrPcCrwdAkCoSQ', (__DIR__.'/pools'), $a));
-        $b->addPool(\Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('viuDqwuNT8', 0, 'qpM5UnlJXrPcCrwdAkCoSQ', (__DIR__.'/pools'), $a));
+        $b->addPool(\Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('YwumcplioG', 0, 'CSRkxMxeWVXRGIJ1NBmSmU', (__DIR__.'/pools'), $a));
+        $b->addPool(\Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('viuDqwuNT8', 0, 'CSRkxMxeWVXRGIJ1NBmSmU', (__DIR__.'/pools'), $a));
 
         return $this->services['cache_clearer'] = new \Symfony\Component\HttpKernel\CacheClearer\ChainCacheClearer(array(0 => $b));
     }
@@ -556,6 +559,7 @@ class appDevDebugProjectContainer extends Container
 
         $instance->addListenerService('kernel.controller', array(0 => 'data_collector.router', 1 => 'onKernelController'), 0);
         $instance->addListenerService('kernel.request', array(0 => 'fos_rest.body_listener', 1 => 'onKernelRequest'), 10);
+        $instance->addListenerService('kernel.request', array(0 => 'fos_rest.format_listener', 1 => 'onKernelRequest'), 34);
         $instance->addSubscriberService('response_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener');
         $instance->addSubscriberService('streamed_response_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\StreamedResponseListener');
         $instance->addSubscriberService('locale_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\LocaleListener');
@@ -578,6 +582,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addSubscriberService('sensio_framework_extra.view.listener', 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener');
         $instance->addSubscriberService('sensio_framework_extra.cache.listener', 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\HttpCacheListener');
         $instance->addSubscriberService('sensio_framework_extra.security.listener', 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\SecurityListener');
+        $instance->addSubscriberService('fos_rest.view_response_listener', 'FOS\\RestBundle\\EventListener\\ViewResponseListener');
         $instance->addSubscriberService('debug.dump_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\DumpListener');
         $instance->addSubscriberService('web_profiler.debug_toolbar', 'Symfony\\Bundle\\WebProfilerBundle\\EventListener\\WebDebugToolbarListener');
 
@@ -1613,6 +1618,37 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'fos_rest.format_listener' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \FOS\RestBundle\EventListener\FormatListener A FOS\RestBundle\EventListener\FormatListener instance
+     */
+    protected function getFosRest_FormatListenerService()
+    {
+        return $this->services['fos_rest.format_listener'] = new \FOS\RestBundle\EventListener\FormatListener($this->get('fos_rest.format_negotiator'));
+    }
+
+    /**
+     * Gets the 'fos_rest.format_negotiator' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \FOS\RestBundle\Negotiation\FormatNegotiator A FOS\RestBundle\Negotiation\FormatNegotiator instance
+     */
+    protected function getFosRest_FormatNegotiatorService()
+    {
+        $this->services['fos_rest.format_negotiator'] = $instance = new \FOS\RestBundle\Negotiation\FormatNegotiator($this->get('request_stack'));
+
+        $instance->add(new \Symfony\Component\HttpFoundation\RequestMatcher('^/_profiler|_wdt/', NULL, NULL, NULL, array()), array('methods' => NULL, 'priorities' => array(0 => 'html', 1 => 'json'), 'fallback_format' => 'html', 'attributes' => array(), 'prefer_extension' => '2.0'));
+        $instance->add(new \Symfony\Component\HttpFoundation\RequestMatcher('^/', NULL, NULL, NULL, array()), array('priorities' => array(0 => 'json'), 'fallback_format' => 'json', 'methods' => NULL, 'attributes' => array(), 'stop' => false, 'prefer_extension' => '2.0'));
+
+        return $instance;
+    }
+
+    /**
      * Gets the 'fos_rest.inflector' service.
      *
      * This service is shared.
@@ -1677,6 +1713,19 @@ class appDevDebugProjectContainer extends Container
     protected function getFosRest_SerializerService($lazyLoad = true)
     {
         return $this->services['fos_rest.serializer'] = new \FOS\RestBundle\Serializer\SymfonySerializerAdapter($this->get('serializer'));
+    }
+
+    /**
+     * Gets the 'fos_rest.view_response_listener' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \FOS\RestBundle\EventListener\ViewResponseListener A FOS\RestBundle\EventListener\ViewResponseListener instance
+     */
+    protected function getFosRest_ViewResponseListenerService()
+    {
+        return $this->services['fos_rest.view_response_listener'] = new \FOS\RestBundle\EventListener\ViewResponseListener($this->get('fos\restbundle\view\viewhandlerinterface'), false);
     }
 
     /**
@@ -2278,9 +2327,9 @@ class appDevDebugProjectContainer extends Container
         $f->addLoader(new \Symfony\Component\Routing\Loader\AnnotationFileLoader($b, $d));
         $f->addLoader($d);
         $f->addLoader(new \FOS\RestBundle\Routing\Loader\DirectoryRouteLoader($b, $e));
-        $f->addLoader(new \FOS\RestBundle\Routing\Loader\RestRouteLoader($this, $b, $a, new \FOS\RestBundle\Routing\Loader\Reader\RestControllerReader(new \FOS\RestBundle\Routing\Loader\Reader\RestActionReader($c, $this->get('fos_rest.request.param_fetcher.reader'), $this->get('fos_rest.inflector'), true, array('json' => false, 'xml' => false, 'html' => true), true), $c), NULL));
-        $f->addLoader(new \FOS\RestBundle\Routing\Loader\RestYamlCollectionLoader($b, $e, true, array('json' => false, 'xml' => false, 'html' => true), NULL));
-        $f->addLoader(new \FOS\RestBundle\Routing\Loader\RestXmlCollectionLoader($b, $e, true, array('json' => false, 'xml' => false, 'html' => true), NULL));
+        $f->addLoader(new \FOS\RestBundle\Routing\Loader\RestRouteLoader($this, $b, $a, new \FOS\RestBundle\Routing\Loader\Reader\RestControllerReader(new \FOS\RestBundle\Routing\Loader\Reader\RestActionReader($c, $this->get('fos_rest.request.param_fetcher.reader'), $this->get('fos_rest.inflector'), 'flase', array('json' => false, 'xml' => false, 'html' => true), true), $c), NULL));
+        $f->addLoader(new \FOS\RestBundle\Routing\Loader\RestYamlCollectionLoader($b, $e, 'flase', array('json' => false, 'xml' => false, 'html' => true), NULL));
+        $f->addLoader(new \FOS\RestBundle\Routing\Loader\RestXmlCollectionLoader($b, $e, 'flase', array('json' => false, 'xml' => false, 'html' => true), NULL));
 
         return $this->services['routing.loader'] = new \Symfony\Bundle\FrameworkBundle\Routing\DelegatingLoader($a, $f);
     }
@@ -2394,7 +2443,7 @@ class appDevDebugProjectContainer extends Container
 
         $f = new \Symfony\Component\Security\Http\AccessMap();
 
-        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($f, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => new \Symfony\Component\Security\Core\User\InMemoryUserProvider()), 'main', $a, $this->get('debug.event_dispatcher', ContainerInterface::NULL_ON_INVALID_REFERENCE), $c), 2 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '5a5340c923ef51.63603162', $a, $d), 3 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('debug.security.access.decision_manager'), $f, $d)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $c, new \Symfony\Component\Security\Http\HttpUtils($e, $e), 'main', NULL, NULL, NULL, $a, false));
+        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($f, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => new \Symfony\Component\Security\Core\User\InMemoryUserProvider()), 'main', $a, $this->get('debug.event_dispatcher', ContainerInterface::NULL_ON_INVALID_REFERENCE), $c), 2 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '5a561895cbbba2.53282762', $a, $d), 3 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('debug.security.access.decision_manager'), $f, $d)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $c, new \Symfony\Component\Security\Http\HttpUtils($e, $e), 'main', NULL, NULL, NULL, $a, false));
     }
 
     /**
@@ -3510,6 +3559,7 @@ class appDevDebugProjectContainer extends Container
         $instance->setTranslator($this->get('translator'));
         $instance->setTranslationDomain('validators');
         $instance->addXmlMappings(array(0 => ($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/config/validation.xml')));
+        $instance->addYamlMappings(array(0 => ($this->targetDirs[3].'/src/AppBundle/Resources/config/validation.yml')));
         $instance->enableAnnotationMapping($this->get('annotation_reader'));
         $instance->addMethodMapping('loadValidatorMetadata');
         $instance->addObjectInitializers(array(0 => $this->get('doctrine.orm.validator_initializer')));
@@ -3765,7 +3815,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_Authentication_ManagerService()
     {
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('5a5340c923ef51.63603162')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('5a561895cbbba2.53282762')), true);
 
         $instance->setEventDispatcher($this->get('debug.event_dispatcher'));
 
@@ -4282,6 +4332,7 @@ class appDevDebugProjectContainer extends Container
             'sensio_framework_extra.converter.doctrine.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
             'sensio_framework_extra.converter.datetime.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
             'sensio_framework_extra.view.listener.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
+            'fos_rest.format_listener.rules' => NULL,
             'web_profiler.debug_toolbar.position' => 'bottom',
             'web_profiler.debug_toolbar.intercept_redirects' => false,
             'web_profiler.debug_toolbar.mode' => 2,

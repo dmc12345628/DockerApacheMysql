@@ -6,7 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="cinema")
+ * @ORM\Table(name="cinema",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="cinema_unique",
+ *     columns={"name", "cp"})}
+ * )
  */
 class Cinema
 {
@@ -37,7 +40,7 @@ class Cinema
      */
     public $ville;
 
-    function __construct($nom, $adresse, $cp, $ville)
+    function __construct($nom = "", $adresse = "", $cp = "", $ville = "")
     {
         $this->nom = $nom;
         $this->adresse = $adresse;
