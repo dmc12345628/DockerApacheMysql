@@ -11,10 +11,15 @@
 
 namespace Symfony\Component\Form\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormRegistry;
 use Symfony\Component\Form\FormTypeGuesserChain;
 use Symfony\Component\Form\ResolvedFormType;
 use Symfony\Component\Form\ResolvedFormTypeFactoryInterface;
+use Symfony\Component\Form\Tests\Fixtures\FormWithSameParentType;
+use Symfony\Component\Form\Tests\Fixtures\RecursiveFormTypeBar;
+use Symfony\Component\Form\Tests\Fixtures\RecursiveFormTypeBaz;
+use Symfony\Component\Form\Tests\Fixtures\RecursiveFormTypeFoo;
 use Symfony\Component\Form\Tests\Fixtures\FooSubType;
 use Symfony\Component\Form\Tests\Fixtures\FooType;
 use Symfony\Component\Form\Tests\Fixtures\FooTypeBarExtension;
@@ -24,7 +29,7 @@ use Symfony\Component\Form\Tests\Fixtures\TestExtension;
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class FormRegistryTest extends \PHPUnit_Framework_TestCase
+class FormRegistryTest extends TestCase
 {
     /**
      * @var FormRegistry
@@ -153,6 +158,36 @@ class FormRegistryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($resolvedType);
 
         $this->assertSame($resolvedType, $this->registry->getType(get_class($type)));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Form\Exception\LogicException
+     * @expectedExceptionMessage Circular reference detected for form type "Symfony\Component\Form\Tests\Fixtures\FormWithSameParentType" (Symfony\Component\Form\Tests\Fixtures\FormWithSameParentType > Symfony\Component\Form\Tests\Fixtures\FormWithSameParentType).
+     */
+    public function testFormCannotHaveItselfAsAParent()
+    {
+        $type = new FormWithSameParentType();
+
+        $this->extension2->addType($type);
+
+        $this->registry->getType(FormWithSameParentType::class);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Form\Exception\LogicException
+     * @expectedExceptionMessage Circular reference detected for form type "Symfony\Component\Form\Tests\Fixtures\RecursiveFormTypeFoo" (Symfony\Component\Form\Tests\Fixtures\RecursiveFormTypeFoo > Symfony\Component\Form\Tests\Fixtures\RecursiveFormTypeBar > Symfony\Component\Form\Tests\Fixtures\RecursiveFormTypeBaz > Symfony\Component\Form\Tests\Fixtures\RecursiveFormTypeFoo).
+     */
+    public function testRecursiveFormDependencies()
+    {
+        $foo = new RecursiveFormTypeFoo();
+        $bar = new RecursiveFormTypeBar();
+        $baz = new RecursiveFormTypeBaz();
+
+        $this->extension2->addType($foo);
+        $this->extension2->addType($bar);
+        $this->extension2->addType($baz);
+
+        $this->registry->getType(RecursiveFormTypeFoo::class);
     }
 
     /**

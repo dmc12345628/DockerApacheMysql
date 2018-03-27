@@ -15,10 +15,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class CinemaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('nom');
-        $builder->add('adresse');
-        $builder->add('cp');
-        $builder->add('ville');
+        $builder->add('nom')
+            ->add('adresse')
+            ->add('accessibilite');
     }
 
     public function configureOptions(OptionsResolver $resolver) {

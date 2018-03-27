@@ -1,0 +1,4 @@
+<?php return array (
+  0 => 9223372036854775807,
+  1 => 'O:50:"Symfony\\Component\\Serializer\\Mapping\\ClassMetadata":2:{s:4:"name";s:22:"AppBundle\\Entity\\Salle";s:18:"attributesMetadata";a:4:{s:2:"id";O:54:"Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata":3:{s:4:"name";s:2:"id";s:6:"groups";a:2:{i:0;s:6:"cinema";i:1;s:5:"salle";}s:8:"maxDepth";N;}s:3:"nom";O:54:"Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata":3:{s:4:"name";s:3:"nom";s:6:"groups";a:2:{i:0;s:6:"cinema";i:1;s:5:"salle";}s:8:"maxDepth";N;}s:8:"capacite";O:54:"Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata":3:{s:4:"name";s:8:"capacite";s:6:"groups";a:2:{i:0;s:6:"cinema";i:1;s:5:"salle";}s:8:"maxDepth";N;}s:6:"cinema";O:54:"Symfony\\Component\\Serializer\\Mapping\\AttributeMetadata":3:{s:4:"name";s:6:"cinema";s:6:"groups";a:1:{i:0;s:5:"salle";}s:8:"maxDepth";N;}}}',
+);

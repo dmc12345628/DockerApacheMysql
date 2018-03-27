@@ -1,6 +1,6 @@
 AppBundle\Entity\Cinema:
     constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: [nom, cp]
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: [nom]
     properties:
         nom:
             - NotBlank: ~
@@ -8,9 +8,15 @@ AppBundle\Entity\Cinema:
         adresse:
             - NotBlank: ~
             - Type: string
-        cp:
+
+AppBundle\Entity\Salle:
+    properties:
+        nom:
             - NotBlank: ~
             - Type: string
-        ville:
+        capacite:
             - NotBlank: ~
-            - Type: string
+            - Type: numeric
+            - GreaterThan:
+                value: 0
+

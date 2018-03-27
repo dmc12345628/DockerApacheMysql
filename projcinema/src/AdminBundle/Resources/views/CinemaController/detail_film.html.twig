@@ -1,0 +1,16 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}Détail film{% endblock %}
+
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1>{{ film.titre }}</h1>
+        </div>
+        <div class="panel-body">
+            <div>Durée : {{ film.duree }}</div>
+            <h3>Résumé</h3>
+            <p>{{ film.resume }}</p>
+        </div>
+    </div>
+{% endblock %}

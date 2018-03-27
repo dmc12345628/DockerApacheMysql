@@ -26,9 +26,6 @@ use Symfony\Component\Validator\ConstraintValidator;
  */
 class UniqueEntityValidator extends ConstraintValidator
 {
-    /**
-     * @var ManagerRegistry
-     */
     private $registry;
 
     public function __construct(ManagerRegistry $registry)
@@ -63,6 +60,10 @@ class UniqueEntityValidator extends ConstraintValidator
             throw new ConstraintDefinitionException('At least one field has to be specified.');
         }
 
+        if (null === $entity) {
+            return;
+        }
+
         if ($constraint->em) {
             $em = $this->registry->getManager($constraint->em);
 
@@ -81,12 +82,18 @@ class UniqueEntityValidator extends ConstraintValidator
         /* @var $class \Doctrine\Common\Persistence\Mapping\ClassMetadata */
 
         $criteria = array();
+        $hasNullValue = false;
+
         foreach ($fields as $fieldName) {
             if (!$class->hasField($fieldName) && !$class->hasAssociation($fieldName)) {
                 throw new ConstraintDefinitionException(sprintf('The field "%s" is not mapped by Doctrine, so it cannot be validated for uniqueness.', $fieldName));
             }
 
             $fieldValue = $class->reflFields[$fieldName]->getValue($entity);
+
+            if (null === $fieldValue) {
+                $hasNullValue = true;
+            }
 
             if ($constraint->ignoreNull && null === $fieldValue) {
                 continue;
@@ -103,13 +110,32 @@ class UniqueEntityValidator extends ConstraintValidator
             }
         }
 
+        // validation doesn't fail if one of the fields is null and if null values should be ignored
+        if ($hasNullValue && $constraint->ignoreNull) {
+            return;
+        }
+
         // skip validation if there are no criteria (this can happen when the
         // "ignoreNull" option is enabled and fields to be checked are null
         if (empty($criteria)) {
             return;
         }
 
-        $repository = $em->getRepository(get_class($entity));
+        if (null !== $constraint->entityClass) {
+            /* Retrieve repository from given entity name.
+             * We ensure the retrieved repository can handle the entity
+             * by checking the entity is the same, or subclass of the supported entity.
+             */
+            $repository = $em->getRepository($constraint->entityClass);
+            $supportedClass = $repository->getClassName();
+
+            if (!$entity instanceof $supportedClass) {
+                throw new ConstraintDefinitionException(sprintf('The "%s" entity repository does not support the "%s" entity. The entity should be an instance of or extend "%s".', $constraint->entityClass, $class->getName(), $supportedClass));
+            }
+        } else {
+            $repository = $em->getRepository(get_class($entity));
+        }
+
         $result = $repository->{$constraint->repositoryMethod}($criteria);
 
         if ($result instanceof \IteratorAggregate) {
@@ -142,6 +168,7 @@ class UniqueEntityValidator extends ConstraintValidator
             ->setParameter('{{ value }}', $this->formatWithIdentifiers($em, $class, $invalidValue))
             ->setInvalidValue($invalidValue)
             ->setCode(UniqueEntity::NOT_UNIQUE_ERROR)
+            ->setCause($result)
             ->addViolation();
     }
 
@@ -151,9 +178,15 @@ class UniqueEntityValidator extends ConstraintValidator
             return $this->formatValue($value, self::PRETTY_DATE);
         }
 
-        // non unique value is a composite PK
         if ($class->getName() !== $idClass = get_class($value)) {
-            $identifiers = $em->getClassMetadata($idClass)->getIdentifierValues($value);
+            // non unique value might be a composite PK that consists of other entity objects
+            if ($em->getMetadataFactory()->hasMetadataFor($idClass)) {
+                $identifiers = $em->getClassMetadata($idClass)->getIdentifierValues($value);
+            } else {
+                // this case might happen if the non unique column has a custom doctrine type and its value is an object
+                // in which case we cannot get any identifiers for it
+                $identifiers = array();
+            }
         } else {
             $identifiers = $class->getIdentifierValues($value);
         }

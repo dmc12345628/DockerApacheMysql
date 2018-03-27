@@ -1,0 +1,16 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}Ajout Film{% endblock %}
+
+{% block body %}
+<h1>Ajout Film</h1>
+<p>Cette page mermettra d'ajouter un film à la base de film</p>
+{% endblock %}
+
+{% block javascripts %}
+    $(document).ready(function () {
+        $(".nav li").removeClass("active");//this will remove the active class from
+        //previously active menu item
+        $('#addFilm').addClass('active');
+    });
+{% endblock %}

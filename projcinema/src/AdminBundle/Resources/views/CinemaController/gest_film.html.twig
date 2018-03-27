@@ -1,0 +1,18 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}Gestion Film à l'affiche semaine cinéma{% endblock %}
+
+{% block body %}
+    <h1>Gestion Film à l'affiche semaine cinéma</h1>
+    <p>Cette page permettra pour un cinéma d'enlever ou d'ajouter un film à l'affiche de la semaine à partir de la liste
+        des films</p>
+{% endblock %}
+
+{% block javascripts %}
+    console.log('test')
+        $(document).ready(function () {
+        $(".nav li").removeClass("active");//this will remove the active class from
+        //previously active menu item
+        $('#gestFilm').addClass('active');
+    });
+{% endblock %}

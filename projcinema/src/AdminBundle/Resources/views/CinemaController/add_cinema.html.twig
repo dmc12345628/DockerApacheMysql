@@ -1,0 +1,21 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}Ajout Cinéma{% endblock %}
+
+{% block body %}
+    <h1>Ajout Cinéma</h1>
+    {{ form_row(form.nom) }}
+
+    {{ form_row(form.adresse) }}
+
+    {{ for_row(form.accessibilite) }}
+{% endblock %}
+
+{% block javascripts %}
+    console.log('test')
+    $(document).ready(function () {
+        $(".nav li").removeClass("active");//this will remove the active class from
+        //previously active menu item
+        $('#addCinema').addClass('active');
+    });
+{% endblock %}

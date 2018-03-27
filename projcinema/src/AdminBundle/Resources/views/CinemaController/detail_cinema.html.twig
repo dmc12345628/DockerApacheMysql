@@ -1,0 +1,45 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}Détail cinéma{% endblock %}
+
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1>{{ cinema.nom }}</h1>
+        </div>
+        <div class="panel-body">
+            <h3>Nos Films</h3>
+            <ul class="list-group">
+                {% for film in cinema.films %}
+                    <li class="list-group-item">
+                        <span class="badge">{{ film.duree }}</span>
+                        {{ film.titre }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <h3>Nos Salles</h3>
+            <ul class="list-group">
+                {% for salle in salles %}
+                    <li class="list-group-item">
+                        <span class="badge">{{ salle.capacite }} places</span>
+                        {{ salle.nom }}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <p>Adresse : {{ cinema.adresse }}</p>
+
+            {% if cinema.accessibilite %}
+                <div class="alert alert-success" role="alert">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    Accessible aux personnes handicapées
+                </div>
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    Pas accessible aux personnes handicapées
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

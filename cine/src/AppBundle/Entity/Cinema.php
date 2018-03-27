@@ -2,14 +2,12 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="cinema",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="cinema_unique",
- *     columns={"name", "cp"})}
- * )
+ * @ORM\Table(name="cinema")
  */
 class Cinema
 {
@@ -31,21 +29,26 @@ class Cinema
     public $adresse;
 
     /**
-     * @ORM\Column(type="string")
+     * @var boolean
+     *
+     * @ORM\Column(name="accessibilite", type="boolean", options={"default" : false})
      */
-    public $cp;
+    private $accessibilite;
 
     /**
-     * @ORM\Column(type="string")
-     */
-    public $ville;
+     * @ORM\OneToMany(targetEntity="Salle", mappedBy="cinema")
+     * @var Salle[]
+    */
+    protected $salles;
 
-    function __construct($nom = "", $adresse = "", $cp = "", $ville = "")
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Film", cascade={"persist"})
+     */
+    private $films;
+
+    function __construct()
     {
-        $this->nom = $nom;
-        $this->adresse = $adresse;
-        $this->cp = $cp;
-        $this->ville = $ville;
+        $this->salles = new ArrayCollection();
     }
 
     /**
@@ -97,34 +100,76 @@ class Cinema
     }
 
     /**
-     * @return mixed
+     * Get Accessibilite
+     *
+     * @return boolean
      */
-    public function getCp()
+    public function getAccessibilite()
     {
-        return $this->cp;
+        return $this->accessibilite;
     }
 
     /**
-     * @param mixed $cp
+     * Set accessibilite
+     *
+     * @param boolean $accessibilite
+     *
+     * @return Cinema
      */
-    public function setCp($cp)
+    public function setAccessibilite($accessibilite)
     {
-        $this->cp = $cp;
+        $this->accessibilite = $accessibilite;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return Salle[]
      */
-    public function getVille()
+    public function getSalles()
     {
-        return $this->ville;
+        return $this->salles;
     }
 
     /**
-     * @param mixed $ville
+     * @param Salle[] $salles
      */
-    public function setVille($ville)
+    public function setSalles($salles)
     {
-        $this->ville = $ville;
+        $this->salles = $salles;
+    }
+
+    /**
+     * Add film
+     *
+     * @param \AppBundle\Entity\Film $film
+     *
+     * @return Cinema
+     */
+    public function addFilm(\AppBundle\Entity\Film $film)
+    {
+        $this->films[] = $film;
+
+        return $this;
+    }
+
+    /**
+     * Remove film
+     *
+     * @param \AppBundle\Entity\Film $film
+     */
+    public function removeFilm(\AppBundle\Entity\Film $film)
+    {
+        $this->films->removeElement($film);
+    }
+
+    /**
+     * Get films
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFilms()
+    {
+        return $this->films;
     }
 }

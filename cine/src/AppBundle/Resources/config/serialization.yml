@@ -1,0 +1,23 @@
+AppBundle\Entity\Cinema:
+    attributes:
+        id:
+            groups: ['cinema', 'salle']
+        nom:
+            groups: ['cinema', 'salle']
+        adresse:
+            groups: ['cinema', 'salle']
+        accessibilite:
+            groups: ['cinema', 'salle']
+        salles:
+            groups: ['cinema']
+
+AppBundle\Entity\Salle:
+   attributes:
+       id:
+            groups: ['cinema', 'salle']
+       nom:
+            groups: ['cinema', 'salle']
+       capacite:
+            groups: ['cinema', 'salle']
+       cinema:
+            groups: ['salle']

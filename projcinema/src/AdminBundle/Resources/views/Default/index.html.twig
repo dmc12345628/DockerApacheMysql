@@ -1,0 +1,33 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block title %}Acceuil{% endblock %}
+
+{% block body %}
+    <h1>Cinémas disponibles</h1>
+    <ul class="list-group">
+        {% for cinema in cinemas %}
+            <li class="list-group-item">
+                {{ cinema.nom }}
+                <a class="btn btn-info" href="detailCinema/{{ cinema.id }}">Détail</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <!--
+    <h1>Films disponibles</h1>
+    <ul class="list-group">
+        {% for film in films %}
+            <li class="list-group-item">
+                {{ film.titre }}
+                <a class="btn btn-info" href="detailFilm/{{ film.id }}">Détail</a>
+            </li>
+        {% endfor %}
+    </ul>-->
+{% endblock %}
+
+{% block javascripts %}
+    $(document).ready(function () {
+    $(".nav li").removeClass("active");//this will remove the active class from
+    //previously active menu item
+    $('#acceuil').addClass('active');
+    });
+{% endblock %}

@@ -2,12 +2,16 @@
 
 namespace Symfony\Component\Security\Http\Tests\Firewall;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\EntryPoint\DigestAuthenticationEntryPoint;
 use Symfony\Component\Security\Http\Firewall\DigestAuthenticationListener;
 
-class DigestAuthenticationListenerTest extends \PHPUnit_Framework_TestCase
+/**
+ * @group legacy
+ */
+class DigestAuthenticationListenerTest extends TestCase
 {
     public function testHandleWithValidDigest()
     {
