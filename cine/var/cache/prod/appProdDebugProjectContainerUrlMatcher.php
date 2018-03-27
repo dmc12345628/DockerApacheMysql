@@ -43,6 +43,17 @@ class appProdDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBun
                 }
                 not_app_cinema_salle_getsalles:
 
+                // app_cinema_salle_getsalle
+                if (0 === strpos($pathinfo, '/cinemas/salles') && preg_match('#^/cinemas/salles/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                    if ('GET' !== $canonicalMethod) {
+                        $allow[] = 'GET';
+                        goto not_app_cinema_salle_getsalle;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_salle_getsalle')), array (  '_controller' => 'AppBundle\\Controller\\Cinema\\SalleController::getSalleAction',));
+                }
+                not_app_cinema_salle_getsalle:
+
                 // app_cinema_salle_postsalles
                 if (preg_match('#^/cinemas/(?P<id>[^/]++)/salles$#s', $pathinfo, $matches)) {
                     if ('POST' !== $canonicalMethod) {
@@ -53,6 +64,42 @@ class appProdDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBun
                     return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_salle_postsalles')), array (  '_controller' => 'AppBundle\\Controller\\Cinema\\SalleController::postSallesAction',));
                 }
                 not_app_cinema_salle_postsalles:
+
+                if (0 === strpos($pathinfo, '/cinemas/salles')) {
+                    // app_cinema_salle_removesalle
+                    if (preg_match('#^/cinemas/salles/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                        if ('DELETE' !== $canonicalMethod) {
+                            $allow[] = 'DELETE';
+                            goto not_app_cinema_salle_removesalle;
+                        }
+
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_salle_removesalle')), array (  '_controller' => 'AppBundle\\Controller\\Cinema\\SalleController::removeSalleAction',));
+                    }
+                    not_app_cinema_salle_removesalle:
+
+                    // app_cinema_salle_updatesalle
+                    if (preg_match('#^/cinemas/salles/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                        if ('PUT' !== $canonicalMethod) {
+                            $allow[] = 'PUT';
+                            goto not_app_cinema_salle_updatesalle;
+                        }
+
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_salle_updatesalle')), array (  '_controller' => 'AppBundle\\Controller\\Cinema\\SalleController::updateSalleAction',));
+                    }
+                    not_app_cinema_salle_updatesalle:
+
+                    // app_cinema_salle_patchsalle
+                    if (preg_match('#^/cinemas/salles/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                        if ('PATCH' !== $canonicalMethod) {
+                            $allow[] = 'PATCH';
+                            goto not_app_cinema_salle_patchsalle;
+                        }
+
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_cinema_salle_patchsalle')), array (  '_controller' => 'AppBundle\\Controller\\Cinema\\SalleController::patchSalleAction',));
+                    }
+                    not_app_cinema_salle_patchsalle:
+
+                }
 
                 // app_cinema_getcinemas
                 if ('/cinemas' === $pathinfo) {
@@ -233,6 +280,31 @@ class appProdDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBun
             not_patch_cinema:
 
             if (0 === strpos($pathinfo, '/cinemas')) {
+                if (0 === strpos($pathinfo, '/cinemas/salles')) {
+                    // remove_salle
+                    if (preg_match('#^/cinemas/salles/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                        if ('DELETE' !== $canonicalMethod) {
+                            $allow[] = 'DELETE';
+                            goto not_remove_salle;
+                        }
+
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'remove_salle')), array (  '_controller' => 'AppBundle\\Controller\\Cinema\\SalleController::removeSalleAction',  '_format' => NULL,));
+                    }
+                    not_remove_salle:
+
+                    // update_salle
+                    if (preg_match('#^/cinemas/salles/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                        if ('PUT' !== $canonicalMethod) {
+                            $allow[] = 'PUT';
+                            goto not_update_salle;
+                        }
+
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'update_salle')), array (  '_controller' => 'AppBundle\\Controller\\Cinema\\SalleController::updateSalleAction',  '_format' => NULL,));
+                    }
+                    not_update_salle:
+
+                }
+
                 // get_salles
                 if (preg_match('#^/cinemas/(?P<id>[^/]++)/salles$#s', $pathinfo, $matches)) {
                     if ('GET' !== $canonicalMethod) {
@@ -244,6 +316,17 @@ class appProdDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBun
                 }
                 not_get_salles:
 
+                // get_salle
+                if (0 === strpos($pathinfo, '/cinemas/salles') && preg_match('#^/cinemas/salles/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                    if ('GET' !== $canonicalMethod) {
+                        $allow[] = 'GET';
+                        goto not_get_salle;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'get_salle')), array (  '_controller' => 'AppBundle\\Controller\\Cinema\\SalleController::getSalleAction',  '_format' => NULL,));
+                }
+                not_get_salle:
+
                 // post_salles
                 if (preg_match('#^/cinemas/(?P<id>[^/]++)/salles$#s', $pathinfo, $matches)) {
                     if ('POST' !== $canonicalMethod) {
@@ -254,6 +337,17 @@ class appProdDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBun
                     return $this->mergeDefaults(array_replace($matches, array('_route' => 'post_salles')), array (  '_controller' => 'AppBundle\\Controller\\Cinema\\SalleController::postSallesAction',  '_format' => NULL,));
                 }
                 not_post_salles:
+
+                // patch_salle
+                if (0 === strpos($pathinfo, '/cinemas/salles') && preg_match('#^/cinemas/salles/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                    if ('PATCH' !== $canonicalMethod) {
+                        $allow[] = 'PATCH';
+                        goto not_patch_salle;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'patch_salle')), array (  '_controller' => 'AppBundle\\Controller\\Cinema\\SalleController::patchSalleAction',  '_format' => NULL,));
+                }
+                not_patch_salle:
 
             }
 

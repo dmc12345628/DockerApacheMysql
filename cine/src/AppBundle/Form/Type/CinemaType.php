@@ -24,6 +24,7 @@ class CinemaType extends AbstractType
         $resolver->setDefaults([
             'data_class' => 'AppBundle\Entity\Cinema',
             'csrf_protection' => false,
+            'allow_extra_fields' => true
         ]);
     }
 }

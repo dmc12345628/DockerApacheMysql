@@ -1,45 +1,169 @@
 {% extends "AdminBundle::layout.html.twig" %}
 
-{% block title %}Détail cinéma{% endblock %}
+{% block title %} Détail cinéma{% endblock %}
 
 {% block body %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h1>{{ cinema.nom }}</h1>
-        </div>
-        <div class="panel-body">
-            <h3>Nos Films</h3>
-            <ul class="list-group">
-                {% for film in cinema.films %}
-                    <li class="list-group-item">
-                        <span class="badge">{{ film.duree }}</span>
-                        {{ film.titre }}
-                    </li>
-                {% endfor %}
-            </ul>
-            <h3>Nos Salles</h3>
-            <ul class="list-group">
-                {% for salle in salles %}
-                    <li class="list-group-item">
-                        <span class="badge">{{ salle.capacite }} places</span>
-                        {{ salle.nom }}
-                    </li>
-                {% endfor %}
-            </ul>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1>{{ cinema.nom }}
+            <a class="btn btn-success" href="../modifyCinema/{{ cinema.id }}/true">
+                <span class="oi oi-pencil"></span>
+            </a>
+        </h1>
+    </div>
+    <div class="panel-body">
+        <h3>Nos Salles</h3>
+        <ul class="list-group">
+            {% for salle in salles %}
+            <li class="list-group-item">
+                <span class="badge">{{ salle.capacite }}
+                    places</span>
+                {{ salle.nom }}
+                <button type="button" class="btn btn-danger right-button" data-toggle="modal" data-target="#delete-modal" 
+                    data-title="{{ salle.nom }}" 
+                    data-body="{{ 'Capacité : ' ~ salle.capacite }}" 
+                    data-href="{{ '../deleteSalle/' ~ salle.id ~ '/' ~ cinema.id }}">
+                    <span class="oi oi-trash"></span>
+                </button>
+                <button type="button" class="btn btn-success right-button" data-toggle="modal" data-target="#form-salle-modal"
+                    data-title="Modifier" 
+                    data-href="{{ '../modifySalle/' ~ salle.id ~ '/' ~ cinema.id }}"
+                    data-nom="{{ salle.nom }}" 
+                    data-capacite="{{ salle.capacite }}">
+                    <span class="oi oi-pencil"></span>
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+        <button type="button" class="btn btn-secondary btn-lg btn-block" data-toggle="modal" data-target="#form-salle-modal"
+            data-title="Ajouter"
+            data-cinema-id="{{ cinema.id }}"
+            data-href="{{ '../addSalle/' ~ cinema.id }}" >
+            Ajouter Salle
+            <span class="oi oi-plus"></span>
+        </button>
 
-            <p>Adresse : {{ cinema.adresse }}</p>
+        <!-- delete-modal -->
+        <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-label-body">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delete-label-body"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">ANNULER</button>
+                        <a class="btn btn-danger right-button">
+                            EFFACER
+                            </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- form-modal -->
+        <div class="modal fade" id="form-salle-modal" tabindex="-1" role="dialog" aria-labelledby="example-modal-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="example-modal-label"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form(salleForm, { 'attr': { 'id': 'salle-form', 'class': 'form-horizontal' }}) }}
+                            </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="addSalle" type="button" class="btn btn-primary" form="salle-form"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if cinema.films | length > 0 %}
+                    <h3 >Nos Films</h3>
+        <ul class="list-group">
+            {% for film in cinema.films %}
+                            <li class="list-group-item">
+                <span class="badge">{{ film.duree }}</span>
+                {{ film.titre }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+                    <br>
+            <h3 >Il n'y a pas des Films</h3>
+            <button type="button" class="btn btn-secondary btn-lg btn-block">
+                Ajouter Film
+                <span class="oi oi-plus"></span>
+            </button>
+            {% endif %}
+
+            <p>Adresse :
+                {{ cinema.adresse }}
+            </p>
 
             {% if cinema.accessibilite %}
-                <div class="alert alert-success" role="alert">
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                    Accessible aux personnes handicapées
-                </div>
+                    <div class="alert alert-success" role="alert">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                Accessible aux personnes handicapées
+                    </div>
             {% else %}
-                <div class="alert alert-warning" role="alert">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    Pas accessible aux personnes handicapées
-                </div>
+                    <div class="alert alert-warning" role="alert">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                Pas accessible aux personnes handicapées
+                    </div>
             {% endif %}
-        </div>
+            </div>
     </div>
-{% endblock %}
+    {% endblock %}
+
+    {% block javascripts %}
+        $(document).ready(function () {
+            $('#addSalle').click(function () { 
+                $('#salle-form').submit(); 
+            }); 
+            
+            $('#delete-modal').on('show.bs.modal', function(event) { 
+                let button = $(event.relatedTarget); 
+                let modalData = {
+                    href: button.data('href'), 
+                    title: button.data('title'), 
+                    body: button.data('body') 
+                }; 
+
+                var modal = $(this); 
+                modal.find('.modal-title').text(modalData.title); 
+                modal.find('.modal-body').text(modalData.body); 
+                modal.find('.modal-footer a').attr('href', modalData.href); 
+            }); 
+            
+            $('#form-salle-modal').on('show.bs.modal', function(event) { 
+                let button = $(event.relatedTarget); 
+                let modalData = {
+                    title: button.data('title'),
+                    href: button.data('href')
+                }; 
+                
+                var modal = $(this); 
+                modal.find('.modal-title').text(modalData.title);
+                modal.find('#salle-form').attr('action', modalData.href);
+                modal.find('#addSalle').text(modalData.title.toUpperCase());
+
+                if (typeof button.data('nom') !== 'undefined') {
+                    let salle = {
+                        nom: button.data('nom'),
+                        capacite: button.data('capacite')
+                    };
+
+                    modal.find('#salle_nom').val(salle.nom);
+                    modal.find('#salle_capacite').val(salle.capacite);
+                }
+            });
+        });
+    {% endblock %}

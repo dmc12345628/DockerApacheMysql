@@ -3,16 +3,24 @@
 {% block title %}Ajout Cinéma{% endblock %}
 
 {% block body %}
-    <h1>Ajout Cinéma</h1>
-    {{ form_row(form.nom) }}
+    <br>
+    <h1>
+        {% if fromDetail == 'true' %}
+            <a type="button" class="btn btn-info left-button" href="../../detailCinema/{{ idCinema }}">
+                <span class="oi oi-chevron-left"></span>
+            </a>
+        {% else %}
+            <a type="button" class="btn btn-info left-button" href="../../">
+                <span class="oi oi-chevron-left"></span>
+            </a>
+        {% endif %}
+        {{ title }} Cinéma
+    </h1>
 
-    {{ form_row(form.adresse) }}
-
-    {{ for_row(form.accessibilite) }}
+    {{ form(form, {'attr': {'class': 'form-horizontal'}}) }}
 {% endblock %}
 
 {% block javascripts %}
-    console.log('test')
     $(document).ready(function () {
         $(".nav li").removeClass("active");//this will remove the active class from
         //previously active menu item

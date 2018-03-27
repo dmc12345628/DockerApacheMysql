@@ -6,36 +6,45 @@
     {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/styles.css"/>
 </head>
 <body>
 
 <div class="container">
     <br>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header p-3 mb-2 bg-info text-white">
-                <a class="navbar-bran" href="#">
-                    <img alt="Brand" src="https://www.visitscotland.com/cms-images/attractions/tv-and-film-header-overlay">
-                </a>
-            </div>
+    <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
+        <div class="navbar-brand">
+          <div>
+            <img alt="Brand" src="/video-camera.png" width="30" height="30">
+          </div>
         </div>
-        <ul class="nav nav-tabs">
-            <li id="accueil" role="presentation"><a href="/">Accueil</a>
-            </li>
-            <li id="addCinema" role="presentation"><a href="/addCinema">Ajout
-                    Cinéma</a></li>
-            <li id="addFilm" role="presentation"><a href="/addFilm">Ajout
-                    Film</a></li>
-            <li id="gestFilm" role="presentation"><a href="/gestFilm">Gestion
-                    Film</a></li>
-        </ul>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+              <li id="accueil" class="nav-item active">
+                <a class="nav-link" href="/">Accueil</a>
+              </li>
+              <li id="addCinema" class="nav-item">
+                <a class="nav-link" href="/addCinema">Ajout Cinéma</a>
+              </li>
+              <li id="addFilm" class="nav-item">
+                <a class="nav-link" href="/addFilm">Ajout Film</a>
+              </li>
+              <li id="gestFilm" class="nav-item">
+                <a class="nav-link" href="/gestFilm">Gestion Film</a>
+              </li>
+          </ul>
+        </div>
     </nav>
 
     {% block body %}{% endblock %}
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script>{% block javascripts %}{% endblock %}</script>
 </body>
 </html>

@@ -14,7 +14,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class CinemaController extends Controller
 {
     /**
-     * @Rest\View(statusCode=Response::HTTP_OK, serializerGroups={"cinema"})
+     * @Rest\View(serializerGroups={"cinema"})
      * @Rest\Get("/cinemas")
      */
     public function getCinemasAction(Request $request)
@@ -27,7 +27,7 @@ class CinemaController extends Controller
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_OK, serializerGroups= {"cinema"})
+     * @Rest\View(serializerGroups= {"cinema"})
      * @Rest\Get("/cinemas/{id}")
      */
     public function getCinemaAction(Request $request)
@@ -37,8 +37,7 @@ class CinemaController extends Controller
             ->find($request->get('id'));
 
         if (empty($cinema)) {
-            return ['message' => 'Cinema not found',
-                'status' => Response::HTTP_NOT_FOUND];
+            return $this->cinemaNotFound();
         }
 
         return $cinema;
@@ -67,7 +66,7 @@ class CinemaController extends Controller
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT,  serializerGroups= {"cinema"})
+     * @Rest\View(serializerGroups= {"cinema"})
      * @Rest\Delete("/cinemas/{id}")
      */
     public function removeCinemaAction(Request $request)
@@ -75,8 +74,8 @@ class CinemaController extends Controller
         $em = $this->get('doctrine.orm.entity_manager');
         $cinema = $em->getRepository('AppBundle:Cinema')->find($request->get('id'));
 
-        if (!cinema) {
-            return;
+        if (empty($cinema)) {
+            return $this->cinemaNotFound();
         }
 
         foreach ($cinema->getSalles() as $salle) {
@@ -85,6 +84,8 @@ class CinemaController extends Controller
 
         $em->remove($cinema);
         $em->flush();
+
+        return $this->cinemaDeleted();
     }
 
     /**
@@ -112,7 +113,7 @@ class CinemaController extends Controller
             ->find($request->get('id'));
 
         if (empty($cinema)) {
-            return new JsonResponse(['message' => 'Cinema not found'], Response::HTTP_NOT_FOUND);
+            return $this->cinemaNotFound();
         }
 
         $form = $this->createForm(CinemaType::class, $cinema);
@@ -127,5 +128,15 @@ class CinemaController extends Controller
             return $cinema;
         } else
             return $form;
+    }
+
+    private function cinemaDeleted() {
+        return \FOS\RestBundle\View\View::create(['message' => 'Cinema deleted'],
+            Response::HTTP_NO_CONTENT);
+    }
+
+    private function cinemaNotFound() {
+        return \FOS\RestBundle\View\View::create(['message' => 'Cinema not found'],
+            Response::HTTP_NOT_FOUND);
     }
 }
