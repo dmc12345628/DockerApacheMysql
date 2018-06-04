@@ -16,6 +16,6 @@ if (!\class_exists(appProdDebugProjectContainer::class, false)) {
 
 return new \ContainerHx43dz3\appProdDebugProjectContainer(array(
     'container.build_hash' => 'Hx43dz3',
-    'container.build_id' => '4982d69a',
-    'container.build_time' => 1519823026,
+    'container.build_id' => '3fb5c75b',
+    'container.build_time' => 1528122768,
 ));

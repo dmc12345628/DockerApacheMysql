@@ -118,7 +118,8 @@ class CinemaController extends Controller
         return $this->render('AdminBundle:CinemaController:add_cinema.html.twig', array(
             'form' => $form->createView(),
             'title' => 'Ajout',
-            'idCinema' => -1
+            'idCinema' => -1,
+            'fromDetail' => false
         ));
     }
 
